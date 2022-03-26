@@ -20,8 +20,8 @@ class Decoder(torch.nn.Module):
 
     def __init__(self,hidden_size):
         super(Decoder,self).__init__()
-        self.l1=torch.nn.Linear(hidden_size,2)
-        self.l2=torch.nn.Linear(hidden_size,2)
+        self.l1=torch.nn.Linear(hidden_size,1)
+        self.l2=torch.nn.Linear(hidden_size,1)
         self.activaton=torch.nn.Sigmoid()
 
     def forward(self,x,y):
