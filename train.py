@@ -82,7 +82,7 @@ class Road2vec_trainer():
         self.model = model
         self.use_cuda=use_cuda
         self.nll = torch.nn.NLLLoss()
-        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr)
+        self.optimizer = torch.optim.SGD(self.model.parameters(), lr=lr)
         self.rate = a
         print("Total Parameters:", sum([p.nelement() for p in self.model.parameters()]))
 
