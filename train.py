@@ -81,7 +81,7 @@ class Road2vec_trainer():
     def __init__(self, model, lr, use_cuda=True,a=0.5):
         self.model = model
         self.use_cuda=use_cuda
-        self.criterion = torch.nn.CrossEntropyLoss()
+        self.nll = torch.nn.NLLLoss()
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr)
         self.rate = a
         print("Total Parameters:", sum([p.nelement() for p in self.model.parameters()]))
@@ -93,9 +93,9 @@ class Road2vec_trainer():
                 if self.use_cuda:
                     x,y,label1,label2=x.cuda(),y.cuda(),label1.cuda(),label2.cuda()
                 output = self.model(x, y)
-                loss1 = self.criterion(output[0], label1)
-                loss2 = self.criterion(output[1], label2)
-                loss = self.rate * loss1 + (1 - self.rate) * loss2
+                loss1 = self.nll(torch.cat([output[0],1-output[0]],dim=1), label1)
+                loss2 = self.nll(torch.cat([output[1],1-output[1]],dim=1), label2)
+                loss = -(self.rate * loss1 + (1 - self.rate) * loss2)
                 self.optimizer.zero_grad()
                 loss.backward()
                 self.optimizer.step()
