@@ -43,7 +43,6 @@ class TMRN_trainer():
         correct_ev=0
         count=0
         count_ev=0
-        nll_=0
         for data,ba_index,ba_adj,ba_label,ba_label_ in test_data:
             if not self.use_mop:
                 ba_label = ba_label_
@@ -59,12 +58,7 @@ class TMRN_trainer():
                     count_ev+=1
                     if predict[i]==ba_label[i]:
                         correct_ev+=1
-            nl=self.criterion(output,ba_label).item()*len(data)
-            nll_+=nl
-
-
         print('accuracy:',correct/count)
-        print('nll:',nll_/len(test_data))
         print('ev_accuracy:',correct_ev/count_ev)
 
 
